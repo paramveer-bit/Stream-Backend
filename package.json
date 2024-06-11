@@ -3,14 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type" : "module",
+  "type": "module",
   "scripts": {
-    "dev" : "nodemon src/index.js"
+    "dev": "nodemon src/index.js"
   },
   "keywords": [
     "javascript",
     "backend"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "prettier": "^3.3.2"
+  }
 }
