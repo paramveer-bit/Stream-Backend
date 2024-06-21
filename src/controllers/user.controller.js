@@ -317,7 +317,7 @@ const updateUserCoverImage = asyncHandler(async (req,res)=>{
 })
 
 
-const getUserChannelProfile = asyncHandler(async ()=>{
+const getUserChannelProfile = asyncHandler(async (req,res)=>{
     const {username} = req.params
 
     if(!username?.trim()){
@@ -328,13 +328,13 @@ const getUserChannelProfile = asyncHandler(async ()=>{
         {
             // THis will find the channel with username i.e channel we are looking for
             $match:{
-                username : username?.toLowerCase
+                username : username?.toLowerCase()
             }
         },
         {
             // this is find all the subscribers of the channel
             $lookup : {
-                form : "subscriptions",
+                from : "subscriptions",
                 localField : "_id",
                 foreignField : "channel",
                 as : "subscribers"
@@ -353,10 +353,10 @@ const getUserChannelProfile = asyncHandler(async ()=>{
             // this will add field in and also check the user is subscribed to that channel or not
             $addFields : {
                 subscriberCount : {
-                    $size : "subscribers"
+                    $size : "$subscribers"
                 },
                 channelSubscribedToCount : {
-                    $size : "subscribedTo"
+                    $size : "$subscribedTo"
                 },
                 isSubscribed : {
                     $cond : {
