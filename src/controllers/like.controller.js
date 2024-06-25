@@ -121,7 +121,6 @@ const getAllUserLike = asyncHandler(async (req,res)=>{
             }
         }
     ])
-    console.log(like)
 
     return res
     .status(200)
