@@ -4,7 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.model.js";
 import mongoose from "mongoose";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { uploadOnCloudinary ,deleteOnCloudinary} from "../utils/cloudinary.js";
 
 const uploadvideo = asyncHandler(async(req,res)=>{
     const {description,title} = req.body
@@ -172,6 +172,11 @@ const updateVideo = asyncHandler(async(req,res)=>{
         throw new ApiError(500,"Error in updating video")
     }
 
+    const oldurl = oldVideo.videoFile
+    const publicId = oldurl.split("/").pop().split(".")[0]
+
+    const deleted = await deleteOnCloudinary(publicId)
+
     return res.status(200).json(new ApiResponse(200,{video},"Video updated successfully"))
 
 })
@@ -266,6 +271,11 @@ const deleteVideo = asyncHandler(async(req,res)=>{
     if(user._id.toString() !== video.owner.toString()){
         throw new ApiError(403,"You are not allowed to delete this video")
     }
+
+    const oldurl = video.videoFile
+    const publicId = oldurl.split("/").pop().split(".")[0]
+
+    const deleted = await deleteOnCloudinary(publicId)
 
     const deletedVideo = await Video.findByIdAndDelete(videoId)
 
